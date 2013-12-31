@@ -1,0 +1,7 @@
+Bundle "burnettk/vim-clojure-static"
+Bundle "dgrnbrg/vim-redl"
+Bundle "vim-scripts/Rainbow-Parentheses-Improved-and2"
+Bundle "tpope/vim-fireplace"
+Bundle "vim-scripts/paredit.vim"
+Bundle "vim-scripts/PreserveNoEOL"
+Bundle "nono/vim-handlebars"
