@@ -1,0 +1,67 @@
+#!/usr/bin/env ruby
+
+# this file orginally grabbed from:
+# http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen
+
+# git://github.com/astashov/vim-ruby-debugger.git # must have some dependency, since it doesn't work for me out of the box
+# git://github.com/airblade/vim-rooter.git # dependency of flashdevelop.vim, but is annoying
+
+# known dependencies are indented
+git_bundles = %w{
+  git://github.com/fholgado/minibufexpl.vim.git
+  git://github.com/godlygeek/tabular.git
+  git://github.com/pangloss/vim-javascript.git
+  git://github.com/scrooloose/nerdtree.git
+  git://github.com/tomtom/tcomment_vim.git
+  git://github.com/tpope/vim-endwise.git
+  git://github.com/tpope/vim-rails.git
+  git://github.com/tpope/vim-repeat.git
+  git://github.com/tpope/vim-surround.git
+  git://github.com/tpope/vim-vividchalk.git
+  git://github.com/vim-ruby/vim-ruby.git
+  git://github.com/vim-scripts/IndexedSearch.git
+  git://github.com/vim-scripts/jQuery.git
+  git://github.com/nelstrom/vim-textobj-rubyblock.git
+    git://github.com/kana/vim-textobj-user.git
+    git://github.com/tsaleh/vim-matchit.git
+  git://github.com/jgdavey/vim-blockle.git
+  git://github.com/Shougo/neocomplcache.git
+  git://github.com/sickill/vim-pasta.git
+  git://github.com/ecomba/vim-ruby-refactoring.git
+  git://github.com/endel/flashdevelop.vim.git
+    git://github.com/tomtom/tlib_vim.git
+  git://github.com/tpope/vim-unimpaired.git
+  git://github.com/sjl/gundo.vim.git
+  git://github.com/kien/ctrlp.vim.git
+  git://github.com/scrooloose/syntastic.git
+  git://github.com/burnettk/vim-clojure-static.git
+  git://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2.git
+  git://github.com/tpope/vim-fireplace.git
+  git://github.com/vim-scripts/paredit.vim.git
+}
+# classpath takes forever, and didn't work for me on the first try, so lein repl is the only way to use fireplace.
+# git://github.com/tpope/vim-classpath.git
+# can't delete a pair of parens if there is stuff inside?!? (well same with paredit, except for Leader+>, but i disabled paredit by default)
+# git://github.com/vim-scripts/slimv.vim.git # same problem
+
+# missing fact as lispword, hence referencing my fork above:
+# git://github.com/guns/vim-clojure-static.git
+
+require 'fileutils'
+require 'open-uri'
+
+bundles_dir = File.join(File.dirname(__FILE__), "bundle")
+
+FileUtils.rm_rf(bundles_dir)
+FileUtils.mkdir(bundles_dir)
+FileUtils.cd(bundles_dir)
+
+git_bundles.each do |url|
+  print url
+  `git clone -q #{url}`
+  puts ": done"
+end
+
+Dir["*/.git"].each {|f| FileUtils.rm_rf(f) }
+
+`cat */support/ctags > ~/.ctags` # at least https://github.com/endel/flashdevelop.vim wants this
