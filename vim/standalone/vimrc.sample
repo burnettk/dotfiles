@@ -1,0 +1,7 @@
+if filereadable($HOME . "/.vim/vimrc.shared")
+  source $HOME/.vim/vimrc.shared
+endif
+
+if filereadable($HOME . "/.vimrc.local")
+  source $HOME/.vimrc.local
+endif
