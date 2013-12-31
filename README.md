@@ -1,3 +1,8 @@
+NOTE: this is a fork! I forked it to add some vim and zsh configs. I could have potentially
+done everything I needed without forking the repo by putting my configs in non-version-controlled
+files (handily provided by yadr for this purpose), but I actually wanted my changes in
+version control.
+
      _     _           _
     | |   | |         | |
     | |___| |_____  __| | ____
@@ -8,7 +13,8 @@
     # Yet Another Dotfile Repo v1.1
     # Now with Prezto and Vundle!
 
-    sh -c "`curl -fsSL https://raw.github.com/skwp/dotfiles/master/install.sh`"
+    sh -c "`curl -fsSL https://raw.github.com/skwp/dotfiles/master/install.sh`" # install skwp's dotfiles
+    sh -c "`curl -fsSL https://raw.github.com/burnettk/dotfiles/master/install.sh`" # install burnettk's fork
 
 **Always be sure to run `rake update` after pulling to ensure plugins are updated**
 

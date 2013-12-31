@@ -1,0 +1,170 @@
+if !exists("g:loaded_pathogen")
+  call pathogen#infect()
+  call pathogen#helptags()
+endif
+
+set nocompatible " We're running Vim, not Vi!
+syntax on " Enable syntax highlighting
+
+set et " expand tabs to spaces
+set ts=2  " Tabs are 2 spaces
+set sts=2 " softtabstop same as tabstop so hitting backspace deletes two spaces
+set shiftwidth=2  " Tabs under smart indent
+set bs=2  " Backspace over everything in insert mode
+set ruler " Show the cursor position all the time, including the line number
+set mouse=a " Enable mouse (for linux or iterm2 on macos). In order to copy to system clipboard, use meta key to drag and drop.
+set hidden " does something useful with hidden buffers
+set hlsearch
+
+" Bubble (move) single lines
+nmap <C-Up> [e
+nmap <C-Down> ]e
+
+" Bubble (move) multiple lines
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
+
+" Control
+nmap <C-Left> :bp<cr>
+nmap <C-Right> :bn<cr>
+
+" allow playback of a macro without having to type the @ sign
+nnoremap <silent> <Space> @q
+
+" If you're splitting windows with :sp and :vsp, hitting ctrl+w h will move 
+" you to the window to the left of the one you're in. it might be nicer 
+" to allow just ctrl+h to do that, eh?
+nmap <C-h> <C-W>h
+nmap <C-j> <C-W>j
+nmap <C-k> <C-W>k
+nmap <C-l> <C-W>l
+
+
+" For these mappings, note that <Leader> is the backslash key by default
+
+" make comma behave like Leader
+nmap , \
+
+" fuzzy finding from Command-T.vim plugin
+" nnoremap <Leader>f :CommandT<CR>
+" fuzzy finding from CtrlP.vim plugin
+nnoremap <Leader>f :CtrlP<CR>
+
+" Test running commands, :Rake and :.Rake, are from the rails.vim plugin
+" Leader+t means run focused unit test.
+nnoremap <Leader>t :w<CR>:.Rake<CR>
+" Leader+T means run all unit tests in file.
+nnoremap <Leader>T :w<CR>:Rake<CR>
+
+" Paredit keeps parens and other delimiters balanced. 
+" It's unintuitive to use, so keep it off by default.
+nnoremap <leader>p :call PareditToggle()<cr>
+let g:paredit_mode = 0
+
+function! PareditToggle()
+  if g:paredit_mode
+    let g:paredit_mode = 0
+  else
+    let g:paredit_mode = 1
+  endif
+endfunction
+
+" set list shows invisible characters. This is a shortcut to toggle `set list`
+nmap <Leader>l :set list!<CR>
+
+" some people claim it's faster to hit jj than to hit the escape key
+imap jj <Esc>
+
+" Use the same symbols as TextMate for tabstops and EOLs
+" Whoops i tried to make the tab work with insert mode ctrl+v u 25b8, but no dice
+" http://vimcasts.org/episodes/show-invisibles/
+"set listchars=tab:¿\ ,eol:¬
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+
+"Invisible character colors
+"highlight NonText guifg=#4a4a59
+"highlight SpecialKey guifg=#4a4a59
+
+" this seems to be what actually takes effect for me, probably because i'm not
+" in a graphical window
+"highlight SpecialKey term=bold cterm=bold ctermfg=4 guifg=#303030
+"
+
+" these make it really easy to open several files from the same directory:
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <Leader>ew :e %%
+map <Leader>es :sp %%
+map <Leader>ev :vsp %%
+map <Leader>et :tabe %%
+
+" http://stackoverflow.com/questions/4196980/is-it-possible-to-have-vim-automatically-treat-regular-expressions-as-if-v-was
+
+nnoremap <Leader>v :edit $MYVIMRC<CR>
+
+nnoremap <silent> <F6> :GundoToggle<CR>
+
+if has("autocmd")
+  filetype plugin indent on " Enable filetype detection, filetype-specific indenting, and filetype-specific plugins
+ 
+  " Restore cursor position
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  " http://stackoverflow.com/questions/2393671/vim-restores-cursor-position-exclude-special-files
+  autocmd BufReadPost COMMIT_EDITMSG,svn-commit.tmp
+    \ exe "normal! gg"
+
+  autocmd BufRead,BufNewFile *.thrift set filetype=thrift
+
+  " make actionscript use tabs. this overrides settings
+  " in this file, as well as flashdevelop.vim
+  autocmd FileType actionscript setlocal noexpandtab
+  autocmd Bufread,BufNewFile actionscript setlocal noexpandtab
+
+  " java
+  autocmd FileType java setlocal noexpandtab
+  autocmd Bufread,BufNewFile java setlocal noexpandtab
+  autocmd Bufread,BufNewFile java set list
+
+  " git config
+  autocmd Bufread,BufNewFile .gitconfig setlocal noexpandtab
+  autocmd Bufread,BufNewFile .gitconfig set list
+
+  " help out people dealing with clojure's mad parentheses. https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2
+  let g:rainbow_active = 1 
+  let g:rainbow_operators = 1
+
+  " Source the .vimrc file after saving it
+  autocmd BufWritePost .vimrc source $MYVIMRC
+  
+  " generate tags for any user-generated docs when those docs are saved
+  autocmd BufWritePost ~/.vim/doc/* :helptags ~/.vim/doc
+endif
+
+if !exists("g:loaded_custom_vim_functions")
+  let g:loaded_custom_vim_functions = 1
+
+  fun! CheckForRailsPlugin() "{{{
+    let wordUnderCursor = expand("<cword>")
+    let fullPluginPath = "vendor/plugins/" . wordUnderCursor
+    echo fullPluginPath
+
+    ":!ls fullPluginPath
+    execute '!ls ' . expand( fullPluginPath ) 
+  endfunction "}}}
+
+  command! CheckForRailsPlugin call CheckForRailsPlugin()
+  nnoremap <Leader>, :CheckForRailsPlugin<CR>
+endif
+
+" 'quote' (single quote) a word. otherwise, ysiw'
+nnoremap qw :silent! normal mpea'<Esc>bi'<Esc>`pl
+" remove quotes from a word
+nnoremap wq :silent! normal mpeld bhd `ph<CR>
+nnoremap qu :s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
+
+if filereadable($HOME . "/.vimrc.local")
+  source $HOME/.vimrc.local
+endif

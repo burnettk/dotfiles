@@ -1,0 +1,5 @@
+" help out people dealing with clojure's mad parentheses. 
+" for plugin: https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2
+" has to run before the plugin is loaded, which is why it's here.
+let g:rainbow_active = 1 
+let g:rainbow_operators = 1
