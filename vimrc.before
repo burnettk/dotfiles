@@ -1,13 +1,9 @@
 " help out people dealing with clojure's mad parentheses. 
 " for plugin: https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2
 " has to run before the plugin is loaded, which is why it's here.
-let g:rainbow_active = 1 
+let g:rainbow_active = 1
 let g:rainbow_operators = 1
 
+" angular
 " https://github.com/scrooloose/syntastic/issues/612#issuecomment-19456342
-let g:syntastic_html_tidy_ignore_errors = [
-  \   ' proprietary attribute "ng-',
-  \   ' proprietary attribute "ui-view',
-  \   ' proprietary attribute "class',
-  \   '<div> proprietary attribute "src'
-  \ ]
+let g:syntastic_html_tidy_ignore_errors = [' proprietary attribute "rs-', ' proprietary attribute "class', 'trimming empty <i>']
