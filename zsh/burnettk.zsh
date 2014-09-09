@@ -9,10 +9,9 @@ esac
 export DOTFILES=~/.yadr/zsh
 
 # setup environment variables
-export PATH=/usr/local/share/python:$PATH # see `brew info python` for why i do this
+#export PATH=/usr/local/share/python:$PATH # see `brew info python` for why i do this
 export PATH=/usr/local/share/npm/bin:$PATH
 export PATH=/usr/local/sbin:$PATH
-export PATH=/usr/local/ejabberd/sbin:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=~/.cabal/bin:$PATH
 export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
@@ -87,11 +86,6 @@ alias mysqlstart='launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plis
 alias mysqlstop='launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist' # or mysql.server stop. or mysqladmin -uroot shutdown
 alias deleteallrediskeys='redis-cli KEYS "*" | xargs redis-cli DEL'
 
-alias ff='firefox -no-remote -P new'
-alias ff2='firefox -no-remote -P seconduser'
-alias ff3='firefox -no-remote -P thirduser'
-alias ff4='firefox -no-remote -P user4'
-alias ffprofile='firefox -no-remote -ProfileManager'
 alias apache='sudo apachectl restart'
 alias ctags='/usr/local/bin/ctags'
 alias unscrewgems='gem list | cut -d" " -f1 | xargs sudo gem uninstall -aIx -i/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/gems/1.8; gem list | cut -d" " -f1 | xargs sudo gem uninstall -aIx -i/Library/Ruby/Gems/1.8; gem list | cut -d" " -f1 | xargs gem uninstall -aIx'
@@ -157,7 +151,13 @@ alias installgems='gem install passenger tidy rmagick mongrel ruby-debug bundler
 alias indexlocatedb='sudo /usr/libexec/locate.updatedb'
 
 # bundler
-alias be='bundle exec'
+function be () {
+  if [ -f "bundle" ]; then
+      ./bundle exec $@
+  else
+      bundle exec $@
+  fi
+}
 
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
@@ -220,7 +220,6 @@ alias un='rtu'
 alias rtf='run "./rake test:functionals"'
 alias fu='rtf'
 alias rti='run "./rake test:integration"'
-alias i='rti'
 alias rtp='run "./rake test:pre_commit"'
 alias rts='run "./rake test:selenium"'
 alias rtj='run "./rake test:javascript"'
