@@ -7,3 +7,6 @@ let g:rainbow_operators = 1
 " angular
 " https://github.com/scrooloose/syntastic/issues/612#issuecomment-19456342
 let g:syntastic_html_tidy_ignore_errors = [' proprietary attribute "rs-', ' proprietary attribute "class', 'trimming empty <i>']
+
+" no more :set [no]paste, which somehow feels incredibly hard to type
+set pastetoggle=<F2>

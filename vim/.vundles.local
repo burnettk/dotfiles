@@ -8,3 +8,4 @@ Bundle "nono/vim-handlebars"
 Bundle "editorconfig/editorconfig-vim"
 Bundle 'matthewsimo/angular-vim-snippets'
 Bundle 'file:///Users/kburnett/.yadr/vim/bundle/vim-angular'
+Bundle 'ngmy/vim-rubocop'

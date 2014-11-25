@@ -39,7 +39,6 @@ function gnb() {
 alias gcm='git checkout master'
 
 # svn
-alias sd="svn diff | less"
 alias sl="svn log --limit 100 | less"
 alias ext="svn propedit svn:externals ."
 alias ig="svn propedit svn:ignore ."
