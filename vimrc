@@ -34,7 +34,7 @@ syntax on
 let mapleader=","
 
 " =============== Vundle Initialization ===============
-" This loads all the plugins specified in ~/.vim/vundle.vim
+" This loads all the plugins specified in ~/.vim/vundles.vim
 " Use Vundle plugin to manage all other plugins
 if filereadable(expand("~/.vim/vundles.vim"))
   source ~/.vim/vundles.vim
@@ -96,7 +96,6 @@ set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 
 "
-
 " ================ Scrolling ========================
 
 set scrolloff=8         "Start scrolling when we're 8 lines away from margins
