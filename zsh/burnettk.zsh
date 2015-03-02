@@ -81,8 +81,8 @@ alias s='echo source $DOTFILES/burnettk.zsh'
 alias d='echo ./script/server; ./script/server'
 alias p='echo ./script/server webrick -p 3000 -e production; ./script/server webrick -p 3000 -e production'
 alias mine='mysql -uroot'
-alias mysqlstart='launchctl load -w ~/Library/LaunchAgents/com.mysql.mysqld.plist' # or mysql.server start
-alias mysqlstop='launchctl unload -w ~/Library/LaunchAgents/com.mysql.mysqld.plist' # or mysql.server stop. or mysqladmin -uroot shutdown
+alias mysqlstart='launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist' # or mysql.server start
+alias mysqlstop='launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist' # or mysql.server stop. or mysqladmin -uroot shutdown
 alias deleteallrediskeys='redis-cli KEYS "*" | xargs redis-cli DEL'
 
 alias apache='sudo apachectl restart'
@@ -122,7 +122,7 @@ function openall() {
 }
 
 unalias g >/dev/null 2>/dev/null
-function g () { grep -r "$1" * | grep -v "Binary file " | grep -v \.svn | grep -v \.min\.js | grep -v tmp\/ | egrep -v "^target/"; }
+function g () { grep -r "$1" * | grep -v "Binary file " | grep -v \\.svn | grep -v \.min\.js | grep -v tmp\/ | egrep -v "^target/"; }
 
 function rg () {
   find . -type f -follow -print -o -type d -name .svn -prune -o -type d -name log -prune -o -type d -name doc -prune -o -type d -name rails -prune -o -type d -name po -prune | xargs grep -si $1 | grep -v "Binary file" | grep -v "web-apps-old" | less
