@@ -15,6 +15,7 @@
   # add
   a = add                           # add
   chunkyadd = add --patch           # stage commits chunk by chunk
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
   # via http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
