@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+SCRIPT_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+if [ -f vimrc.shared ]; then
+  cd ~/.vim
+  ln -nsf $SCRIPT_PARENT_DIR/doc .
+else
+  echo "please run like this: ./bin/install_alongside_thoughtbot_dotfiles"
+  exit 1
+fi

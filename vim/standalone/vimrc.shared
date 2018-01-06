@@ -1,6 +1,12 @@
-if !exists("g:loaded_pathogen")
-  call pathogen#infect()
-  call pathogen#helptags()
+if !exists("g:skip_pathogen")
+  if !exists("g:loaded_pathogen")
+    call pathogen#infect()
+    call pathogen#helptags()
+  endif
+endif
+
+if isdirectory("~/.vim/doc")
+  helptags ~/.vim/doc
 endif
 
 set nocompatible " We're running Vim, not Vi!
@@ -31,8 +37,8 @@ nmap <C-Right> :bn<cr>
 " allow playback of a macro without having to type the @ sign
 nnoremap <silent> <Space> @q
 
-" If you're splitting windows with :sp and :vsp, hitting ctrl+w h will move 
-" you to the window to the left of the one you're in. it might be nicer 
+" If you're splitting windows with :sp and :vsp, hitting ctrl+w h will move
+" you to the window to the left of the one you're in. it might be nicer
 " to allow just ctrl+h to do that, eh?
 nmap <C-h> <C-W>h
 nmap <C-j> <C-W>j
@@ -48,18 +54,21 @@ nmap , \
 " fuzzy finding from Command-T.vim plugin
 " nnoremap <Leader>f :CommandT<CR>
 " fuzzy finding from CtrlP.vim plugin
-nnoremap <Leader>f :CtrlP<CR>
+nnoremap <Leader>ff :CtrlP<CR>
+nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " Test running commands, :Rake and :.Rake, are from the rails.vim plugin
-" Leader+t means run focused unit test.
+" Write current buffer and :.Rake to run focused unit test.
 nnoremap <Leader>t :w<CR>:.Rake<CR>
-" Leader+T means run all unit tests in file.
+" (note capital T) Write current buffer and :Rake to run all unit tests in file.
 nnoremap <Leader>T :w<CR>:Rake<CR>
 
-" Paredit keeps parens and other delimiters balanced. 
-" It's unintuitive to use, so keep it off by default.
-nnoremap <leader>p :call PareditToggle()<cr>
+" PareditToggle: paredit keeps parens balanced, but it's a bit unintuitive, so keep it off by default.
+" nnoremap <leader>p :call PareditToggle()<cr>
 let g:paredit_mode = 0
+
+" I doubt anyone using this cares more about Paredit than pasting...
+nnoremap <Leader>p :set paste!<CR>
 
 function! PareditToggle()
   if g:paredit_mode
@@ -72,13 +81,15 @@ endfunction
 " set list shows invisible characters. This is a shortcut to toggle `set list`
 nmap <Leader>l :set list!<CR>
 
-" some people claim it's faster to hit jj than to hit the escape key
+" jj as alternate way to leave insert mode. some people claim it's faster than
+" escape.
 imap jj <Esc>
 
 " Use the same symbols as TextMate for tabstops and EOLs
 " Whoops i tried to make the tab work with insert mode ctrl+v u 25b8, but no dice
 " http://vimcasts.org/episodes/show-invisibles/
-"set listchars=tab:¿\ ,eol:¬
+"set listchars=tab:Â¿\ ,eol:Â¬
+set nolist
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 
 "Invisible character colors
@@ -92,10 +103,11 @@ set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 
 " these make it really easy to open several files from the same directory:
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <Leader>ew :e %%
-map <Leader>es :sp %%
-map <Leader>ev :vsp %%
-map <Leader>et :tabe %%
+" :e %% opens another file in the same directory
+nmap <Leader>ew :e %%
+nmap <Leader>es :sp %%
+nmap <Leader>ev :vsp %%
+nmap <Leader>et :tabe %%
 
 " http://stackoverflow.com/questions/4196980/is-it-possible-to-have-vim-automatically-treat-regular-expressions-as-if-v-was
 
@@ -105,7 +117,7 @@ nnoremap <silent> <F6> :GundoToggle<CR>
 
 if has("autocmd")
   filetype plugin indent on " Enable filetype detection, filetype-specific indenting, and filetype-specific plugins
- 
+
   " Restore cursor position
   autocmd BufReadPost *
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -133,12 +145,12 @@ if has("autocmd")
   autocmd Bufread,BufNewFile .gitconfig set list
 
   " help out people dealing with clojure's mad parentheses. https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2
-  let g:rainbow_active = 1 
+  let g:rainbow_active = 1
   let g:rainbow_operators = 1
 
   " Source the .vimrc file after saving it
   autocmd BufWritePost .vimrc source $MYVIMRC
-  
+
   " generate tags for any user-generated docs when those docs are saved
   autocmd BufWritePost ~/.vim/doc/* :helptags ~/.vim/doc
 endif
@@ -152,7 +164,7 @@ if !exists("g:loaded_custom_vim_functions")
     echo fullPluginPath
 
     ":!ls fullPluginPath
-    execute '!ls ' . expand( fullPluginPath ) 
+    execute '!ls ' . expand( fullPluginPath )
   endfunction "}}}
 
   command! CheckForRailsPlugin call CheckForRailsPlugin()
@@ -165,6 +177,8 @@ nnoremap qw :silent! normal mpea'<Esc>bi'<Esc>`pl
 nnoremap wq :silent! normal mpeld bhd `ph<CR>
 nnoremap qu :s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
 
-if filereadable($HOME . "/.vimrc.local")
-  source $HOME/.vimrc.local
+if !exists("g:already_loaded_vimrc_local")
+  if filereadable($HOME . "/.vimrc.local")
+    source $HOME/.vimrc.local
+  endif
 endif
